@@ -51,22 +51,28 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         super.onOptionsItemSelected(item);
         if (item.getItemId() == R.id.logoutOption){
-            user.logOutAsync(result -> {
-                if(result.isSuccess()){
-                    Toast.makeText(this, "Sign out successfully", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                    finish();
-                } else {
-                    new AlertDialog.Builder(MainActivity.this)
+            logout();
+        }
+        if (item.getItemId() == R.id.profileOption){
+            startActivity(new Intent(MainActivity.this, SettingActivity.class));
+        }
+        return true;
+    }
+
+    void logout(){
+        user.logOutAsync(result -> {
+            if(result.isSuccess()){
+                Toast.makeText(this, "Sign out successfully", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                finish();
+            } else {
+                new AlertDialog.Builder(MainActivity.this)
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .setTitle("Error in signing out")
                         .setMessage(result.getError().getErrorMessage())
                         .setPositiveButton("Ok", null)
                         .show();
-                }
-            });
-
-        }
-        return true;
+            }
+        });
     }
 }
