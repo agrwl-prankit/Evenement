@@ -40,33 +40,33 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        super.onCreateOptionsMenu(menu);
-//        getMenuInflater().inflate(R.menu.main_menu, menu);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-//        super.onOptionsItemSelected(item);
-//        if (item.getItemId() == R.id.logoutOption){
-//            user.logOutAsync(result -> {
-//                if(result.isSuccess()){
-//                    Toast.makeText(this, "Sign out successfully", Toast.LENGTH_SHORT).show();
-//                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
-//                    finish();
-//                } else {
-//                    new AlertDialog.Builder(MainActivity.this)
-//                        .setIcon(android.R.drawable.ic_dialog_alert)
-//                        .setTitle("Error in signing out")
-//                        .setMessage(result.getError().getErrorMessage())
-//                        .setPositiveButton("Ok", null)
-//                        .show();
-//                }
-//            });
-//
-//        }
-//        return true;
-//    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        super.onOptionsItemSelected(item);
+        if (item.getItemId() == R.id.logoutOption){
+            user.logOutAsync(result -> {
+                if(result.isSuccess()){
+                    Toast.makeText(this, "Sign out successfully", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                    finish();
+                } else {
+                    new AlertDialog.Builder(MainActivity.this)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setTitle("Error in signing out")
+                        .setMessage(result.getError().getErrorMessage())
+                        .setPositiveButton("Ok", null)
+                        .show();
+                }
+            });
+
+        }
+        return true;
+    }
 }
