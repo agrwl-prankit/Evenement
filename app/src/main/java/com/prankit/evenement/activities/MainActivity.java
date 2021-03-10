@@ -37,8 +37,7 @@ public class MainActivity extends AppCompatActivity {
         Realm.init(this);
         appInfo = new AppInfo();
         user = appInfo.getApp().currentUser();
-        Log.i("uidd", user.getId());
-
+        Log.i("userid", user.getId());
     }
 
     @Override

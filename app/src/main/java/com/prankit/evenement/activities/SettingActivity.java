@@ -7,6 +7,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
@@ -70,9 +71,10 @@ public class SettingActivity extends AppCompatActivity {
         loadingBar.setMessage("Please wait...");
         loadingBar.setCanceledOnTouchOutside(true);
         loadingBar.show();
-        Document findQuery = new Document().append("userId", user.getId());
+        Document findQuery = new Document("userId", user.getId());
         collection.findOne(findQuery).getAsync((App.Result<Document> result) -> {
             if (result.isSuccess() && !result.get().getString("name").equals("")){
+                Log.i("uiddata", result.get().toJson());
                 updateName = result.get().getString("name");
                 updateEmail = result.get().getString("email");
                 updateNumber = result.get().getString("number");
@@ -91,24 +93,21 @@ public class SettingActivity extends AppCompatActivity {
         loadingBar.show();
         Document findQuery = new Document().append("userId", user.getId());
         collection.updateOne(findQuery, new Document("userId", user.getId()).append("name", inputName.getText().toString())
-                .append("number", inputNumber.getText().toString()).append("email", inputEmail.getText().toString())).getAsync(new App.Callback<UpdateResult>() {
-            @Override
-            public void onResult(App.Result<UpdateResult> result) {
-                if (result.isSuccess()){
-                    long count = result.get().getModifiedCount();
-                    if (count == 1) {
-                        Toast.makeText(SettingActivity.this, "Update profile successfully", Toast.LENGTH_SHORT).show();
+                .append("number", inputNumber.getText().toString())).getAsync(result -> {
+                    if (result.isSuccess()){
+                        long count = result.get().getModifiedCount();
+                        if (count == 1) {
+                            Toast.makeText(SettingActivity.this, "Update profile successfully", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        new AlertDialog.Builder(SettingActivity.this)
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .setTitle("Error in updating profile")
+                                .setMessage(result.getError().getErrorMessage())
+                                .setPositiveButton("Ok", null)
+                                .show();
                     }
-                } else {
-                    new AlertDialog.Builder(SettingActivity.this)
-                            .setIcon(android.R.drawable.ic_dialog_alert)
-                            .setTitle("Error in updating profile")
-                            .setMessage(result.getError().getErrorMessage())
-                            .setPositiveButton("Ok", null)
-                            .show();
-                }
-            }
-        });
+                });
         loadingBar.dismiss();
         finish();
     }

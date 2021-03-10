@@ -50,7 +50,7 @@ public class SignUpActivity extends AppCompatActivity {
         Button signInButton = findViewById(R.id.signInButton);
 
         signInButton.setOnClickListener(view ->
-                signIn(inputEmail.getText().toString(), inputEmail.getText().toString(), inputName.getText().toString(), inputNumber.getText().toString()));
+                signIn(inputName.getText().toString(), inputNumber.getText().toString(), inputEmail.getText().toString(), inputPassword.getText().toString()));
 
     }
 
@@ -87,7 +87,9 @@ public class SignUpActivity extends AppCompatActivity {
     private void addProfile(String id) {
 
         user = appInfo.getApp().currentUser();
-        client = user.getMongoClient("mongodb-atlas");
+        if (user != null) {
+            client = user.getMongoClient("mongodb-atlas");
+        }
         db = client.getDatabase("Event");
         collection = db.getCollection("User_Info");
 
