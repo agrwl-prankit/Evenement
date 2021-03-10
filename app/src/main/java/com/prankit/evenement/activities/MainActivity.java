@@ -3,6 +3,7 @@ package com.prankit.evenement.activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.viewpager.widget.ViewPager;
 
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -12,7 +13,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.android.material.tabs.TabLayout;
 import com.prankit.evenement.R;
+import com.prankit.evenement.TabAdapter;
 import com.prankit.evenement.Utils.AppInfo;
 
 import io.realm.Realm;
@@ -24,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
 
     AppInfo appInfo;
     User user;
+    TabLayout tabLayout = findViewById(R.id.TabLayout);
+    ViewPager viewPager = findViewById(R.id.ViewPager);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +38,25 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.mainToolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Evenement");
+
+        tabLayout.addTab(tabLayout.newTab().setText("Events"));
+        tabLayout.addTab(tabLayout.newTab().setText("My Events"));
+        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        final TabAdapter adapter = new TabAdapter(this,getSupportFragmentManager(), tabLayout.getTabCount());
+        viewPager.setAdapter(adapter);
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
+            }
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+            }
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+            }
+        });
 
         Realm.init(this);
         appInfo = new AppInfo();
