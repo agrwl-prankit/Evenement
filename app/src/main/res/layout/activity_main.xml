@@ -28,37 +28,29 @@
                 android:textColor="@color/white"
                 android:textSize="20sp" />
 
-            <ImageView
-                android:id="@+id/logOut"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_margin="10dp"
-                android:src="@drawable/logout_icon" />
+                android:orientation="horizontal"
+                android:layout_gravity="end">
+
+                <ImageView
+                    android:id="@+id/gotoProfile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:src="@drawable/profile_icon" />
+
+                <ImageView
+                    android:id="@+id/logOut"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:src="@drawable/logout_icon" />
+
+            </LinearLayout>
 
         </FrameLayout>
-
-        <LinearLayout
-            android:id="@+id/mainProfileLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_gravity="center"
-            android:gravity="center">
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:src="@drawable/profile_icon" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="UserName"
-                android:textSize="25sp"
-                android:textStyle="bold" />
-
-        </LinearLayout>
 
     </LinearLayout>
 

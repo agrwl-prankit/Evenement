@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
@@ -20,10 +22,15 @@ import com.prankit.evenement.R;
 import com.prankit.evenement.TabAdapter;
 import com.prankit.evenement.Utils.AppInfo;
 
+import org.bson.Document;
+
 import io.realm.Realm;
 import io.realm.mongodb.App;
 import io.realm.mongodb.AppConfiguration;
 import io.realm.mongodb.User;
+import io.realm.mongodb.mongo.MongoClient;
+import io.realm.mongodb.mongo.MongoCollection;
+import io.realm.mongodb.mongo.MongoDatabase;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -61,9 +68,8 @@ public class MainActivity extends AppCompatActivity {
         user = appInfo.getApp().currentUser();
 
         ImageView logOut = findViewById(R.id.logOut);
-        LinearLayout profileLayout = findViewById(R.id.mainProfileLayout);
-
-        profileLayout.setOnClickListener(view -> startActivity(new Intent(this, SettingActivity.class)));
+        ImageView gotoProfile = findViewById(R.id.gotoProfile);
+        gotoProfile.setOnClickListener(view -> startActivity(new Intent(this, SettingActivity.class)));
         logOut.setOnClickListener(view -> logout());
     }
 
