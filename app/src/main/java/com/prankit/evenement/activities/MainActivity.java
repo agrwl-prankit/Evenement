@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
@@ -27,18 +29,14 @@ public class MainActivity extends AppCompatActivity {
 
     AppInfo appInfo;
     User user;
-    TabLayout tabLayout = findViewById(R.id.TabLayout);
-    ViewPager viewPager = findViewById(R.id.ViewPager);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = findViewById(R.id.mainToolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Evenement");
-
+        TabLayout tabLayout = findViewById(R.id.TabLayout);
+        ViewPager viewPager = findViewById(R.id.ViewPager);
         tabLayout.addTab(tabLayout.newTab().setText("Events"));
         tabLayout.addTab(tabLayout.newTab().setText("My Events"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
@@ -61,27 +59,14 @@ public class MainActivity extends AppCompatActivity {
         Realm.init(this);
         appInfo = new AppInfo();
         user = appInfo.getApp().currentUser();
-        Log.i("userid", user.getId());
+
+        ImageView logOut = findViewById(R.id.logOut);
+        LinearLayout profileLayout = findViewById(R.id.mainProfileLayout);
+
+        profileLayout.setOnClickListener(view -> startActivity(new Intent(this, SettingActivity.class)));
+        logOut.setOnClickListener(view -> logout());
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.main_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        super.onOptionsItemSelected(item);
-        if (item.getItemId() == R.id.logoutOption){
-            logout();
-        }
-        if (item.getItemId() == R.id.profileOption){
-            startActivity(new Intent(MainActivity.this, SettingActivity.class));
-        }
-        return true;
-    }
 
     void logout(){
         user.logOutAsync(result -> {

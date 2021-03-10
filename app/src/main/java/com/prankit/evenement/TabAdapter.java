@@ -7,6 +7,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
+import com.prankit.evenement.fragments.EventsFragment;
+import com.prankit.evenement.fragments.MyEventFragment;
+
 public class TabAdapter extends FragmentPagerAdapter {
 
     Context context;
@@ -21,18 +24,10 @@ public class TabAdapter extends FragmentPagerAdapter {
     @NonNull
     @Override
     public Fragment getItem(int position) {
-//        switch (position){
-//            case 0:
-//                AdminChatFragment chatFragment = new AdminChatFragment();
-//                return chatFragment;
-//            case 1:
-//                AdminShowChatFragment showChatFragment = new AdminShowChatFragment();
-//                return showChatFragment;
-//            default:
-//                chatFragment = new AdminChatFragment();
-//                return chatFragment;
-//        }
-        return null;
+        if (position == 1) {
+            return new MyEventFragment();
+        }
+        return new EventsFragment();
     }
 
     @Override
