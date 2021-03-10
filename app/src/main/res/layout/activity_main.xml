@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".activities.MainActivity">
 
     <androidx.appcompat.widget.Toolbar
@@ -15,10 +16,28 @@
         app:titleTextColor="#FAFAFA"
         tools:ignore="MissingConstraints" />
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="Hello World!"/>
+        android:background="@color/design_default_color_primary"
+        android:orientation="vertical">
 
-</RelativeLayout>
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/TabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_corner"
+            app:tabTextColor="#000000"
+            android:layout_margin="20dp"
+            />
+
+    </LinearLayout>
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/adminViewPager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="8dp"
+        />
+
+</LinearLayout>
