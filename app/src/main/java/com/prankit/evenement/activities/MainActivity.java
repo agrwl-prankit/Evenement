@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.prankit.evenement.R;
 import com.prankit.evenement.TabAdapter;
@@ -69,6 +70,9 @@ public class MainActivity extends AppCompatActivity {
 
         ImageView logOut = findViewById(R.id.logOut);
         ImageView gotoProfile = findViewById(R.id.gotoProfile);
+        FloatingActionButton fab = findViewById(R.id.addEventFab);
+
+        fab.setOnClickListener(view -> startActivity(new Intent(this, AddEventActivity.class)));
         gotoProfile.setOnClickListener(view -> startActivity(new Intent(this, SettingActivity.class)));
         logOut.setOnClickListener(view -> logout());
     }
