@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -56,7 +57,7 @@ public class AddEventActivity extends AppCompatActivity {
         TextView createBtn = findViewById(R.id.createEventBtn);
         ImageView closeEvent = findViewById(R.id.closeCreateEvent);
 
-        closeEvent.setOnClickListener(view -> finish());
+        closeEvent.setOnClickListener(view -> backToMainActivity());
         createBtn.setOnClickListener(view -> createEvent());
         start.setOnClickListener(view -> {
             selectDate = "Start";
@@ -151,9 +152,8 @@ public class AddEventActivity extends AppCompatActivity {
                                     .append("email", email.getText().toString()).append("number", number.getText().toString()))
                                     .getAsync(result1 -> {
                                         if (result1.isSuccess()) {
-                                            Log.i("id1", result1.get().getInsertedId().toString());
+                                            backToMainActivity();
                                             Toast.makeText(this, "Event create successfully", Toast.LENGTH_SHORT).show();
-                                            finish();
                                         } else {
                                             new AlertDialog.Builder(AddEventActivity.this)
                                                     .setIcon(android.R.drawable.ic_dialog_alert)
@@ -174,6 +174,17 @@ public class AddEventActivity extends AppCompatActivity {
                     });
             loadingBar.dismiss();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        backToMainActivity();
+    }
+
+    private void backToMainActivity(){
+        startActivity(new Intent(AddEventActivity.this, MainActivity.class));
+        finish();
     }
 
 }

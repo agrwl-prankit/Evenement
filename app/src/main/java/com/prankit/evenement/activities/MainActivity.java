@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -72,7 +73,10 @@ public class MainActivity extends AppCompatActivity {
         ImageView gotoProfile = findViewById(R.id.gotoProfile);
         FloatingActionButton fab = findViewById(R.id.addEventFab);
 
-        fab.setOnClickListener(view -> startActivity(new Intent(this, AddEventActivity.class)));
+        fab.setOnClickListener(view -> {
+            startActivity(new Intent(MainActivity.this, AddEventActivity.class));
+            finish();
+        });
         gotoProfile.setOnClickListener(view -> startActivity(new Intent(this, SettingActivity.class)));
         logOut.setOnClickListener(view -> logout());
     }

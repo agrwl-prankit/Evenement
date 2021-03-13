@@ -58,6 +58,12 @@ public class EventsFragment extends Fragment {
         return view;
     }
 
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        retrieveInfo();
+//    }
+
     public  void  retrieveInfo(){
         events.clear();
         Document findQuery = new Document();
