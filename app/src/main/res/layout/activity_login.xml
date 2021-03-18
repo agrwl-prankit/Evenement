@@ -18,6 +18,13 @@
             android:layout_margin="15dp"
             android:orientation="vertical">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Evenement"
+                android:textSize="55sp"
+                android:layout_gravity="center"/>
+
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -49,24 +56,84 @@
 
             <Button
                 android:id="@+id/loginButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Login"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Log in"
+                android:background="#A472EC"
+                android:textColor="@color/white"
+                android:textAllCaps="false"
                 android:textSize="25sp"
+                android:padding="15dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"/>
 
-            <Button
-                android:id="@+id/signUpButton"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Create Account"
-                android:textSize="25sp"
-                android:layout_gravity="center"
-                android:layout_marginTop="20dp"/>
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:layout_gravity="center">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Forgotten your login details?"
+                    android:textSize="15sp"/>
+
+                <TextView
+                    android:id="@+id/forgetPassword"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Get help with logging in."
+                    android:textSize="15sp"
+                    android:layout_marginLeft="8dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/purple_700"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 
     </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical"
+        android:layout_marginBottom="10dp">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:id="@+id/view_left"
+            android:background="@android:color/darker_gray"
+            android:layout_marginBottom="10dp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Don't have an account?"
+                android:textSize="20sp"/>
+
+            <TextView
+                android:id="@+id/signUpButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sign up."
+                android:textSize="20sp"
+                android:layout_marginLeft="8dp"
+                android:textStyle="bold"
+                android:textColor="@color/purple_700"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 </RelativeLayout>

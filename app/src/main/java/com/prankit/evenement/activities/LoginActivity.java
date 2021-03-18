@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
@@ -37,8 +38,10 @@ public class LoginActivity extends AppCompatActivity {
         TextInputEditText email = findViewById(R.id.inputLoginEmail);
         TextInputEditText password = findViewById(R.id.inputLoginPassword);
         Button loginButton = findViewById(R.id.loginButton);
-        Button signUp = findViewById(R.id.signUpButton);
+        TextView signUp = findViewById(R.id.signUpButton);
+        TextView forgetPassword = findViewById(R.id.forgetPassword);
 
+        //forgetPassword.setOnClickListener(view -> {});
         signUp.setOnClickListener(view -> startActivity(new Intent(this, SignUpActivity.class)));
         loginButton.setOnClickListener(view -> login(email.getText().toString(), password.getText().toString()));
     }

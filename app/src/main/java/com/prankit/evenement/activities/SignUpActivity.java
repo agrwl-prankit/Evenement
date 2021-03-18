@@ -7,7 +7,9 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
@@ -48,7 +50,12 @@ public class SignUpActivity extends AppCompatActivity {
         inputName = findViewById(R.id.inputSignInName);
         inputNumber = findViewById(R.id.inputSignInNumber);
         Button signInButton = findViewById(R.id.signInButton);
+        TextView login = findViewById(R.id.loginPageButton);
 
+        login.setOnClickListener(view -> {
+            startActivity(new Intent(SignUpActivity.this, LoginActivity.class));
+            finish();
+        });
         signInButton.setOnClickListener(view ->
                 signIn(inputName.getText().toString(), inputNumber.getText().toString(), inputEmail.getText().toString(), inputPassword.getText().toString()));
 
