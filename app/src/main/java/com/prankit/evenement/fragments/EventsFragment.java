@@ -6,9 +6,12 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.prankit.evenement.adapter.EventsAdapter;
 import com.prankit.evenement.R;
@@ -58,15 +61,9 @@ public class EventsFragment extends Fragment {
         return view;
     }
 
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//        retrieveInfo();
-//    }
-
     public  void  retrieveInfo(){
         events.clear();
-        Document findQuery = new Document();
+        Document findQuery = new Document("type", "all");
         RealmResultTask<MongoCursor<Document>> findTask = postCollection.find(findQuery).iterator();
         findTask.getAsync(task ->{
             if (task.isSuccess()){

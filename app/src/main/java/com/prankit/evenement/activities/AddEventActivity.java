@@ -69,16 +69,6 @@ public class AddEventActivity extends AppCompatActivity {
         });
     }
 
-    private void initializeDb() {
-        Realm.init(this);
-        appInfo = new AppInfo();
-        User user = appInfo.getApp().currentUser();
-        MongoClient client = user.getMongoClient("mongodb-atlas");
-        MongoDatabase db = client.getDatabase("Event");
-        myPostCollection = db.getCollection("My_Post_Info");
-        postCollection = db.getCollection("Post_Info");
-        userId = user.getId();
-    }
 
     private void showDatePicker() {
         final Calendar c = Calendar.getInstance();
@@ -111,16 +101,6 @@ public class AddEventActivity extends AppCompatActivity {
         }
     };
 
-    private void initializeField() {
-        createrName = findViewById(R.id.inputEventCreateName);
-        eventName = findViewById(R.id.inputEventName);
-        start = findViewById(R.id.inputEventSDate);
-        end = findViewById(R.id.inputEventEDate);
-        fee = findViewById(R.id.inputEventFee);
-        email = findViewById(R.id.inputEventEmail);
-        number = findViewById(R.id.inputEventNumber);
-        loadingBar = new ProgressDialog(this);
-    }
 
     private void createEvent() {
         if (eventName.getText().toString().equals("") || start.getText().toString().equals("") || end.getText().toString().equals("")
@@ -133,7 +113,8 @@ public class AddEventActivity extends AppCompatActivity {
             if (email.getText().toString().equals("")) email.setError("Required Field");
             if (number.getText().toString().equals("")) number.setError("Required Field");
             if (createrName.getText().toString().equals("")) createrName.setError("Required Field");
-        } else {
+        }
+        else {
             loadingBar.setTitle("Creating event");
             loadingBar.setMessage("Please wait...");
             loadingBar.setCanceledOnTouchOutside(true);
@@ -141,16 +122,15 @@ public class AddEventActivity extends AppCompatActivity {
             myPostCollection.insertOne(new Document("userId", userId).append("createrName", createrName.getText().toString())
                     .append("eventName", eventName.getText().toString()).append("startDate", start.getText().toString())
                     .append("endDate", end.getText().toString()).append("fee", fee.getText().toString())
-                    .append("email", email.getText().toString()).append("number", number.getText().toString()))
-                    .getAsync(result -> {
+                    .append("email", email.getText().toString()).append("number", number.getText().toString())
+                    .append("type", "all")).getAsync(result -> {
                         if (result.isSuccess()) {
-                            Log.i("id11", result.get().getInsertedId().toString());
                             postCollection.insertOne(new Document("userId", userId)
                                     .append("createrName", createrName.getText().toString()).append("_id", result.get().getInsertedId())
                                     .append("eventName", eventName.getText().toString()).append("startDate", start.getText().toString())
                                     .append("endDate", end.getText().toString()).append("fee", fee.getText().toString())
-                                    .append("email", email.getText().toString()).append("number", number.getText().toString()))
-                                    .getAsync(result1 -> {
+                                    .append("email", email.getText().toString()).append("number", number.getText().toString())
+                                    .append("type", "all")).getAsync(result1 -> {
                                         if (result1.isSuccess()) {
                                             backToMainActivity();
                                             Toast.makeText(this, "Event create successfully", Toast.LENGTH_SHORT).show();
@@ -176,6 +156,28 @@ public class AddEventActivity extends AppCompatActivity {
         }
     }
 
+    private void initializeField() {
+        createrName = findViewById(R.id.inputEventCreateName);
+        eventName = findViewById(R.id.inputEventName);
+        start = findViewById(R.id.inputEventSDate);
+        end = findViewById(R.id.inputEventEDate);
+        fee = findViewById(R.id.inputEventFee);
+        email = findViewById(R.id.inputEventEmail);
+        number = findViewById(R.id.inputEventNumber);
+        loadingBar = new ProgressDialog(this);
+    }
+
+    private void initializeDb() {
+        Realm.init(this);
+        appInfo = new AppInfo();
+        User user = appInfo.getApp().currentUser();
+        MongoClient client = user.getMongoClient("mongodb-atlas");
+        MongoDatabase db = client.getDatabase("Event");
+        myPostCollection = db.getCollection("My_Post_Info");
+        postCollection = db.getCollection("Post_Info");
+        userId = user.getId();
+    }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -186,5 +188,4 @@ public class AddEventActivity extends AppCompatActivity {
         startActivity(new Intent(AddEventActivity.this, MainActivity.class));
         finish();
     }
-
 }

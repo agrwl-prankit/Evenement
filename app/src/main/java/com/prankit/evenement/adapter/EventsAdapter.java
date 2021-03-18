@@ -1,6 +1,7 @@
 package com.prankit.evenement.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,7 +54,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             name = itemView.findViewById(R.id.eventName);
             sdate = itemView.findViewById(R.id.eventSDate);
             edate = itemView.findViewById(R.id.eventEDate);
-            fee = itemView.findViewById(R.id.eventFee);
+            fee = itemView.findViewById(R.id.eventfee);
         }
     }
 }

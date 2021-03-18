@@ -34,9 +34,6 @@ public class SettingActivity extends AppCompatActivity {
     private TextInputEditText inputName, inputNumber, inputEmail;
     private String updateName = null, updateNumber = null, updateEmail = null;
     private ProgressDialog loadingBar;
-    private Button addButton;
-    private MongoDatabase db;
-    private MongoClient client;
     private MongoCollection<Document> collection;
 
     @Override
@@ -52,8 +49,8 @@ public class SettingActivity extends AppCompatActivity {
         Realm.init(this);
         appInfo = new AppInfo();
         user = appInfo.getApp().currentUser();
-        client = user.getMongoClient("mongodb-atlas");
-        db = client.getDatabase("Event");
+        MongoClient client = user.getMongoClient("mongodb-atlas");
+        MongoDatabase db = client.getDatabase("Event");
         collection = db.getCollection("User_Info");
         retrieveInfo();
 
@@ -61,7 +58,7 @@ public class SettingActivity extends AppCompatActivity {
         inputName = findViewById(R.id.inputProfileName);
         inputNumber = findViewById(R.id.inputProfileNumber);
         inputEmail = findViewById(R.id.inputProfileEmail);
-        addButton = findViewById(R.id.addProfileButton);
+        Button addButton = findViewById(R.id.addProfileButton);
 
         addButton.setOnClickListener(view -> updateInfo());
     }
@@ -74,7 +71,6 @@ public class SettingActivity extends AppCompatActivity {
         Document findQuery = new Document("userId", user.getId());
         collection.findOne(findQuery).getAsync((App.Result<Document> result) -> {
             if (result.isSuccess() && !result.get().getString("name").equals("")){
-                Log.i("uiddata", result.get().toJson());
                 updateName = result.get().getString("name");
                 updateEmail = result.get().getString("email");
                 updateNumber = result.get().getString("number");
