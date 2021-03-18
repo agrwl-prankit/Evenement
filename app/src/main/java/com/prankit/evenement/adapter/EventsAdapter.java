@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -39,6 +40,9 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         holder.sdate.setText(eventList.get(position).getStartDate());
         holder.edate.setText(eventList.get(position).getEndDate());
         holder.fee.setText(eventList.get(position).getFee());
+
+        holder.participant.setVisibility(View.VISIBLE);
+        holder.participantText.setText("Apply");
     }
 
     @Override
@@ -47,7 +51,8 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView name, sdate, edate, fee;
+        TextView name, sdate, edate, fee, participantText;
+        LinearLayout participant, l1, edit, l2, delete;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -55,6 +60,12 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             sdate = itemView.findViewById(R.id.eventSDate);
             edate = itemView.findViewById(R.id.eventEDate);
             fee = itemView.findViewById(R.id.eventfee);
+            participantText = itemView.findViewById(R.id.eventParticipantText);
+            participant = itemView.findViewById(R.id.eventParticipant);
+            l1 = itemView.findViewById(R.id.eventL1);
+            edit = itemView.findViewById(R.id.eventEdit);
+            l2 = itemView.findViewById(R.id.eventL2);
+            delete = itemView.findViewById(R.id.eventDelete);
         }
     }
 }

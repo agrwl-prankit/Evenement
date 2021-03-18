@@ -159,9 +159,11 @@
                             android:id="@+id/eventParticipant"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_weight="1">
+                            android:layout_weight="1"
+                            android:visibility="invisible">
 
                             <TextView
+                                android:id="@+id/eventParticipantText"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
@@ -172,16 +174,20 @@
                         </LinearLayout>
 
                         <LinearLayout
+                            android:id="@+id/eventL1"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="0.03"
-                            android:background="@android:color/darker_gray" />
+                            android:orientation="vertical"
+                            android:background="@android:color/darker_gray"
+                            android:visibility="invisible"/>
 
                         <LinearLayout
                             android:id="@+id/eventEdit"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_weight="1">
+                            android:layout_weight="1"
+                            android:visibility="invisible">
 
                             <TextView
                                 android:layout_width="match_parent"
@@ -193,16 +199,20 @@
                         </LinearLayout>
 
                         <LinearLayout
+                            android:id="@+id/eventL2"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:background="@android:color/darker_gray"
-                            android:layout_weight="0.03" />
+                            android:layout_weight="0.03"
+                            android:orientation="vertical"
+                            android:visibility="invisible"/>
 
                         <LinearLayout
                             android:id="@+id/eventDelete"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_weight="1">
+                            android:layout_weight="1"
+                            android:visibility="invisible">
 
                             <TextView
                                 android:layout_width="match_parent"
