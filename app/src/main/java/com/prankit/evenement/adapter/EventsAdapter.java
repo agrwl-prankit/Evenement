@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.prankit.evenement.R;
+import com.prankit.evenement.activities.ApplyEventActivity;
 import com.prankit.evenement.models.EventInfo;
 
 import java.util.ArrayList;
@@ -44,7 +45,19 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         holder.participant.setVisibility(View.VISIBLE);
         holder.participantText.setText("Apply");
 
-        holder.participant.setOnClickListener(view -> {});
+        holder.participant.setOnClickListener(view -> {
+            Intent intent = new Intent(context, ApplyEventActivity.class);
+            intent.putExtra("eventId", eventList.get(position).get_id());
+            intent.putExtra("createrId", eventList.get(position).getUserId());
+            intent.putExtra("eventName", eventList.get(position).getEventName());
+            intent.putExtra("createrName", eventList.get(position).getCreaterName());
+            intent.putExtra("sDate", eventList.get(position).getStartDate());
+            intent.putExtra("eDate", eventList.get(position).getEndDate());
+            intent.putExtra("fee", eventList.get(position).getFee());
+            intent.putExtra("email", eventList.get(position).getEmail());
+            intent.putExtra("number", eventList.get(position).getNumber());
+            context.startActivity(intent);
+        });
     }
 
     @Override
