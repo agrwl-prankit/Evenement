@@ -42,7 +42,7 @@ public class AddEventActivity extends AppCompatActivity {
     private TextInputEditText createrName, eventName, start, end, fee, email, number;
     AppInfo appInfo;
     private String userId, selectDate = "";
-    private MongoCollection<Document> myPostCollection, postCollection;
+    private MongoCollection<Document> postCollection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,45 +113,29 @@ public class AddEventActivity extends AppCompatActivity {
             if (email.getText().toString().equals("")) email.setError("Required Field");
             if (number.getText().toString().equals("")) number.setError("Required Field");
             if (createrName.getText().toString().equals("")) createrName.setError("Required Field");
-        }
-        else {
+        } else {
             loadingBar.setTitle("Creating event");
             loadingBar.setMessage("Please wait...");
             loadingBar.setCanceledOnTouchOutside(true);
             loadingBar.show();
-            myPostCollection.insertOne(new Document("userId", userId).append("createrName", createrName.getText().toString())
+            postCollection.insertOne(new Document("userId", userId).append("createrName", createrName.getText().toString())
                     .append("eventName", eventName.getText().toString()).append("startDate", start.getText().toString())
                     .append("endDate", end.getText().toString()).append("fee", fee.getText().toString())
                     .append("email", email.getText().toString()).append("number", number.getText().toString())
                     .append("type", "all")).getAsync(result -> {
-                        if (result.isSuccess()) {
-                            postCollection.insertOne(new Document("userId", userId)
-                                    .append("createrName", createrName.getText().toString()).append("_id", result.get().getInsertedId())
-                                    .append("eventName", eventName.getText().toString()).append("startDate", start.getText().toString())
-                                    .append("endDate", end.getText().toString()).append("fee", fee.getText().toString())
-                                    .append("email", email.getText().toString()).append("number", number.getText().toString())
-                                    .append("type", "all")).getAsync(result1 -> {
-                                        if (result1.isSuccess()) {
-                                            backToMainActivity();
-                                            Toast.makeText(this, "Event create successfully", Toast.LENGTH_SHORT).show();
-                                        } else {
-                                            new AlertDialog.Builder(AddEventActivity.this)
-                                                    .setIcon(android.R.drawable.ic_dialog_alert)
-                                                    .setTitle("Error in creating event")
-                                                    .setMessage(result1.getError().getErrorMessage())
-                                                    .setPositiveButton("Ok", null)
-                                                    .show();
-                                        }
-                                    });
-                        } else {
-                            new AlertDialog.Builder(AddEventActivity.this)
-                                    .setIcon(android.R.drawable.ic_dialog_alert)
-                                    .setTitle("Error in creating event")
-                                    .setMessage(result.getError().getErrorMessage())
-                                    .setPositiveButton("Ok", null)
-                                    .show();
-                        }
-                    });
+                if (result.isSuccess()) {
+                    backToMainActivity();
+                    Toast.makeText(this, "Event create successfully", Toast.LENGTH_SHORT).show();
+
+                } else {
+                    new AlertDialog.Builder(AddEventActivity.this)
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .setTitle("Error in creating event")
+                            .setMessage(result.getError().getErrorMessage())
+                            .setPositiveButton("Ok", null)
+                            .show();
+                }
+            });
             loadingBar.dismiss();
         }
     }
@@ -173,7 +157,6 @@ public class AddEventActivity extends AppCompatActivity {
         User user = appInfo.getApp().currentUser();
         MongoClient client = user.getMongoClient("mongodb-atlas");
         MongoDatabase db = client.getDatabase("Event");
-        myPostCollection = db.getCollection("My_Post_Info");
         postCollection = db.getCollection("Post_Info");
         userId = user.getId();
     }
@@ -184,7 +167,7 @@ public class AddEventActivity extends AppCompatActivity {
         backToMainActivity();
     }
 
-    private void backToMainActivity(){
+    private void backToMainActivity() {
         startActivity(new Intent(AddEventActivity.this, MainActivity.class));
         finish();
     }

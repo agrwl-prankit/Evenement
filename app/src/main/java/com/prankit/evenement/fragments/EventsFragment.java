@@ -70,7 +70,7 @@ public class EventsFragment extends Fragment {
                 MongoCursor<Document> result = task.get();
                 while (result.hasNext()){
                     Document currentDoc = result.next();
-                    if (!currentDoc.getString("eventName").equals("")){
+                    if (!currentDoc.getString("eventName").equals("") && !currentDoc.getString("userId").equals(user.getId())){
                         String userId = currentDoc.getString("userId");
                         String createrName = currentDoc.getString("createrName");
                         String eventName = currentDoc.getString("eventName");

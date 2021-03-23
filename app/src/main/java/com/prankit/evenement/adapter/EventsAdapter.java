@@ -43,6 +43,8 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
         holder.participant.setVisibility(View.VISIBLE);
         holder.participantText.setText("Apply");
+
+        holder.participant.setOnClickListener(view -> {});
     }
 
     @Override
