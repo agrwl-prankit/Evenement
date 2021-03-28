@@ -60,6 +60,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:cursorVisible="true"
+                    android:inputType="phone"
                     android:hint="Contact Number"
                     android:textSize="25sp" />
 
