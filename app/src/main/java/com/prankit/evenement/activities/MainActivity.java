@@ -1,38 +1,19 @@
 package com.prankit.evenement.activities;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
-
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.prankit.evenement.R;
 import com.prankit.evenement.TabAdapter;
 import com.prankit.evenement.Utils.AppInfo;
-
-import org.bson.Document;
-
 import io.realm.Realm;
-import io.realm.mongodb.App;
-import io.realm.mongodb.AppConfiguration;
 import io.realm.mongodb.User;
-import io.realm.mongodb.mongo.MongoClient;
-import io.realm.mongodb.mongo.MongoCollection;
-import io.realm.mongodb.mongo.MongoDatabase;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -83,19 +64,29 @@ public class MainActivity extends AppCompatActivity {
 
 
     void logout(){
-        user.logOutAsync(result -> {
-            if(result.isSuccess()){
-                Toast.makeText(this, "Sign out successfully", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                finish();
-            } else {
-                new AlertDialog.Builder(MainActivity.this)
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .setTitle("Error in signing out")
-                        .setMessage(result.getError().getErrorMessage())
-                        .setPositiveButton("Ok", null)
-                        .show();
-            }
-        });
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle("Log Out");
+        dialog.setMessage("Do you want to Log out?");
+        dialog.setPositiveButton("Yes", (dialogInterface, d) -> {
+            user.logOutAsync(result -> {
+                if(result.isSuccess()){
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                    finish();
+                    Toast.makeText(this, "Sign out successfully", Toast.LENGTH_SHORT).show();
+                } else {
+                    new AlertDialog.Builder(MainActivity.this)
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .setTitle("Error in signing out")
+                            .setMessage(result.getError().getErrorMessage())
+                            .setPositiveButton("Ok", null)
+                            .show();
+                }
+            });
+        })
+                .setNegativeButton("No", (dialogInterface, d) -> {
+
+                });
+        dialog.create();
+        dialog.show();
     }
 }
