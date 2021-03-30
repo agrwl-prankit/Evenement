@@ -36,6 +36,7 @@ import io.realm.mongodb.mongo.MongoDatabase;
 
 public class AddEventActivity extends AppCompatActivity {
 
+    private String fromIntent = "No", eventId;
     private ProgressDialog loadingBar;
     Calendar myCalendar;
     private int mDay, mMonth, mYear;
@@ -43,6 +44,7 @@ public class AddEventActivity extends AppCompatActivity {
     AppInfo appInfo;
     private String userId, selectDate = "";
     private MongoCollection<Document> postCollection;
+    private TextView createBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,14 +53,16 @@ public class AddEventActivity extends AppCompatActivity {
 
         initializeField();
         initializeDb();
+        getFromIntent();
 
         myCalendar = Calendar.getInstance();
-
-        TextView createBtn = findViewById(R.id.createEventBtn);
         ImageView closeEvent = findViewById(R.id.closeCreateEvent);
 
         closeEvent.setOnClickListener(view -> backToMainActivity());
-        createBtn.setOnClickListener(view -> createEvent());
+        createBtn.setOnClickListener(view -> {
+            if (fromIntent.equals("No")) createEvent();
+            else updateEvent();
+        });
         start.setOnClickListener(view -> {
             selectDate = "Start";
             showDatePicker();
@@ -69,6 +73,46 @@ public class AddEventActivity extends AppCompatActivity {
         });
     }
 
+    private void updateEvent() {
+        loadingBar.setTitle("Updating Event");
+        loadingBar.setMessage("Please wait...");
+        loadingBar.setCanceledOnTouchOutside(true);
+        loadingBar.show();
+        Document findQuery = new Document().append("userId", userId);
+        postCollection.updateOne(findQuery, new Document("userId", userId).append("createrName", createrName.getText().toString())
+                .append("eventName", eventName.getText().toString()).append("startDate", start.getText().toString())
+                .append("endDate", end.getText().toString()).append("fee", fee.getText().toString())
+                .append("email", email.getText().toString()).append("number", number.getText().toString())
+                .append("type", "all")).getAsync(result -> {
+            if (result.isSuccess()) {
+                backToMainActivity();
+                Toast.makeText(this, "Event updated successfully", Toast.LENGTH_SHORT).show();
+            } else {
+                new AlertDialog.Builder(AddEventActivity.this)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setTitle("Error in updating event")
+                        .setMessage(result.getError().getErrorMessage())
+                        .setPositiveButton("Ok", null)
+                        .show();
+            }
+        });
+        loadingBar.dismiss();
+    }
+
+    private void getFromIntent() {
+        fromIntent = getIntent().getStringExtra("FromIntent");
+        if (fromIntent.equals("yes")){
+            createrName.setText(getIntent().getStringExtra("uname"));
+            eventName.setText(getIntent().getStringExtra("ename"));
+            start.setText(getIntent().getStringExtra("sd"));
+            end.setText(getIntent().getStringExtra("ed"));
+            fee.setText(getIntent().getStringExtra("fee"));
+            email.setText(getIntent().getStringExtra("mail"));
+            number.setText(getIntent().getStringExtra("num"));
+            eventId = getIntent().getStringExtra("eid");
+            createBtn.setText("Update Event");
+        }
+    }
 
     private void showDatePicker() {
         final Calendar c = Calendar.getInstance();
@@ -101,7 +145,6 @@ public class AddEventActivity extends AppCompatActivity {
         }
     };
 
-
     private void createEvent() {
         if (eventName.getText().toString().equals("") || start.getText().toString().equals("") || end.getText().toString().equals("")
                 || fee.getText().toString().equals("") || email.getText().toString().equals("") || number.getText().toString().equals("")
@@ -126,7 +169,6 @@ public class AddEventActivity extends AppCompatActivity {
                 if (result.isSuccess()) {
                     backToMainActivity();
                     Toast.makeText(this, "Event create successfully", Toast.LENGTH_SHORT).show();
-
                 } else {
                     new AlertDialog.Builder(AddEventActivity.this)
                             .setIcon(android.R.drawable.ic_dialog_alert)
@@ -148,6 +190,7 @@ public class AddEventActivity extends AppCompatActivity {
         fee = findViewById(R.id.inputEventFee);
         email = findViewById(R.id.inputEventEmail);
         number = findViewById(R.id.inputEventNumber);
+        createBtn = findViewById(R.id.createEventBtn);
         loadingBar = new ProgressDialog(this);
     }
 
