@@ -64,6 +64,12 @@ public class MyEventAdapter extends RecyclerView.Adapter<MyEventAdapter.ViewHold
             context.startActivity(intent);
         });
 
+        holder.delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
     }
 
     @Override

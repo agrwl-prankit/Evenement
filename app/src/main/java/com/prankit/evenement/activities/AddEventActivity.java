@@ -22,6 +22,7 @@ import com.prankit.evenement.R;
 import com.prankit.evenement.Utils.AppInfo;
 
 import org.bson.Document;
+import org.bson.types.ObjectId;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -78,16 +79,18 @@ public class AddEventActivity extends AppCompatActivity {
         loadingBar.setMessage("Please wait...");
         loadingBar.setCanceledOnTouchOutside(true);
         loadingBar.show();
-        Document findQuery = new Document().append("userId", userId);
+        Document findQuery = new Document().append("_id", new ObjectId(eventId));
         postCollection.updateOne(findQuery, new Document("userId", userId).append("createrName", createrName.getText().toString())
                 .append("eventName", eventName.getText().toString()).append("startDate", start.getText().toString())
                 .append("endDate", end.getText().toString()).append("fee", fee.getText().toString())
                 .append("email", email.getText().toString()).append("number", number.getText().toString())
                 .append("type", "all")).getAsync(result -> {
             if (result.isSuccess()) {
+                loadingBar.dismiss();
                 backToMainActivity();
                 Toast.makeText(this, "Event updated successfully", Toast.LENGTH_SHORT).show();
             } else {
+                loadingBar.dismiss();
                 new AlertDialog.Builder(AddEventActivity.this)
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .setTitle("Error in updating event")
@@ -96,12 +99,11 @@ public class AddEventActivity extends AppCompatActivity {
                         .show();
             }
         });
-        loadingBar.dismiss();
     }
 
     private void getFromIntent() {
-        fromIntent = getIntent().getStringExtra("FromIntent");
-        if (fromIntent.equals("yes")){
+        if (getIntent().hasExtra("FromIntent")) {
+            fromIntent = getIntent().getStringExtra("FromIntent");
             createrName.setText(getIntent().getStringExtra("uname"));
             eventName.setText(getIntent().getStringExtra("ename"));
             start.setText(getIntent().getStringExtra("sd"));
@@ -167,9 +169,11 @@ public class AddEventActivity extends AppCompatActivity {
                     .append("email", email.getText().toString()).append("number", number.getText().toString())
                     .append("type", "all")).getAsync(result -> {
                 if (result.isSuccess()) {
+                    loadingBar.dismiss();
                     backToMainActivity();
                     Toast.makeText(this, "Event create successfully", Toast.LENGTH_SHORT).show();
                 } else {
+                    loadingBar.dismiss();
                     new AlertDialog.Builder(AddEventActivity.this)
                             .setIcon(android.R.drawable.ic_dialog_alert)
                             .setTitle("Error in creating event")
@@ -178,7 +182,6 @@ public class AddEventActivity extends AppCompatActivity {
                             .show();
                 }
             });
-            loadingBar.dismiss();
         }
     }
 
