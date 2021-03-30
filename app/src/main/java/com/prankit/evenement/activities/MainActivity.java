@@ -58,7 +58,10 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(MainActivity.this, AddEventActivity.class));
             finish();
         });
-        gotoProfile.setOnClickListener(view -> startActivity(new Intent(this, SettingActivity.class)));
+        gotoProfile.setOnClickListener(view -> {
+            startActivity(new Intent(this, SettingActivity.class));
+            finish();
+        });
         logOut.setOnClickListener(view -> logout());
     }
 

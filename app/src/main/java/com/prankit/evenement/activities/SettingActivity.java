@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -105,12 +106,14 @@ public class SettingActivity extends AppCompatActivity {
                     }
                 });
         loadingBar.dismiss();
+        startActivity(new Intent(SettingActivity.this, MainActivity.class));
         finish();
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        startActivity(new Intent(this, MainActivity.class));
         finish();
     }
 
