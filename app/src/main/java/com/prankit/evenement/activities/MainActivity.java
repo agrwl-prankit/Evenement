@@ -84,7 +84,6 @@ public class MainActivity extends AppCompatActivity {
             });
         })
                 .setNegativeButton("No", (dialogInterface, d) -> {
-
                 });
         dialog.create();
         dialog.show();
