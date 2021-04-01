@@ -20,6 +20,7 @@ import com.prankit.evenement.Utils.AppInfo;
 import com.prankit.evenement.activities.AddEventActivity;
 import com.prankit.evenement.activities.LoginActivity;
 import com.prankit.evenement.activities.MainActivity;
+import com.prankit.evenement.activities.ShowParticipantsActivity;
 import com.prankit.evenement.models.EventInfo;
 
 import org.bson.Document;
@@ -71,6 +72,16 @@ public class MyEventAdapter extends RecyclerView.Adapter<MyEventAdapter.ViewHold
         holder.edit.setVisibility(View.VISIBLE);
         holder.l2.setVisibility(View.VISIBLE);
         holder.delete.setVisibility(View.VISIBLE);
+
+        holder.participant.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, ShowParticipantsActivity.class);
+                intent.putExtra("eventId", eventList.get(position).get_id());
+                intent.putExtra("eventName", eventList.get(position).getEventName());
+                context.startActivity(intent);
+            }
+        });
 
         holder.edit.setOnClickListener(view -> {
             Intent intent = new Intent(context, AddEventActivity.class);
@@ -136,7 +147,7 @@ public class MyEventAdapter extends RecyclerView.Adapter<MyEventAdapter.ViewHold
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView name, sdate, edate, fee, participantText, number, cName;
+        TextView name, sdate, edate, fee, number, cName;
         LinearLayout participant, l1, edit, l2, delete;
 
         public ViewHolder(@NonNull View itemView) {
@@ -146,7 +157,6 @@ public class MyEventAdapter extends RecyclerView.Adapter<MyEventAdapter.ViewHold
             sdate = itemView.findViewById(R.id.eventSDate);
             edate = itemView.findViewById(R.id.eventEDate);
             fee = itemView.findViewById(R.id.eventfee);
-            participantText = itemView.findViewById(R.id.eventParticipantText);
             participant = itemView.findViewById(R.id.eventParticipant);
             l1 = itemView.findViewById(R.id.eventL1);
             edit = itemView.findViewById(R.id.eventEdit);
