@@ -3,6 +3,7 @@ package com.prankit.evenement.activities;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
@@ -72,6 +73,10 @@ public class MainActivity extends AppCompatActivity {
         dialog.setMessage("Do you want to Log out?");
         dialog.setPositiveButton("Yes", (dialogInterface, d) -> {
             user.logOutAsync(result -> {
+                ProgressDialog loadingBar = new ProgressDialog(this);
+                loadingBar.setMessage("Signing out..");
+                loadingBar.setCanceledOnTouchOutside(true);
+                loadingBar.show();
                 if(result.isSuccess()){
                     startActivity(new Intent(MainActivity.this, LoginActivity.class));
                     finish();
@@ -84,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
                             .setPositiveButton("Ok", null)
                             .show();
                 }
+                loadingBar.dismiss();
             });
         })
                 .setNegativeButton("No", (dialogInterface, d) -> {
