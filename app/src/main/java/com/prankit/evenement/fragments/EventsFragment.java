@@ -1,5 +1,6 @@
 package com.prankit.evenement.fragments;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -33,7 +34,6 @@ import io.realm.mongodb.mongo.iterable.MongoCursor;
 
 public class EventsFragment extends Fragment {
 
-    private View view;
     AppInfo appInfo;
     private User user;
     private MongoCollection<Document>  postCollection;
@@ -41,6 +41,7 @@ public class EventsFragment extends Fragment {
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView.Adapter adapter;
     ArrayList<EventInfo> events = new ArrayList<>();
+    private ProgressDialog loadingBar;
 
     public EventsFragment() {
         // Required empty public constructor
@@ -50,9 +51,10 @@ public class EventsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_events, container, false);
+        View view = inflater.inflate(R.layout.fragment_events, container, false);
         initializeDb();
 
+        loadingBar = new ProgressDialog(getActivity());
         recyclerView = view.findViewById(R.id.eventRecycleList);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
@@ -62,6 +64,10 @@ public class EventsFragment extends Fragment {
     }
 
     public  void  retrieveInfo(){
+        loadingBar.setTitle("Collecting Events");
+        loadingBar.setMessage("Please wait...");
+        loadingBar.setCanceledOnTouchOutside(true);
+        loadingBar.show();
         events.clear();
         Document findQuery = new Document("type", "all");
         RealmResultTask<MongoCursor<Document>> findTask = postCollection.find(findQuery).iterator();
@@ -89,6 +95,7 @@ public class EventsFragment extends Fragment {
                     }
                 }
             }
+            loadingBar.dismiss();
         });
     }
 

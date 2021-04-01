@@ -1,10 +1,8 @@
 package com.prankit.evenement.adapter;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,22 +10,14 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.prankit.evenement.R;
 import com.prankit.evenement.Utils.AppInfo;
-import com.prankit.evenement.activities.SignUpActivity;
 import com.prankit.evenement.models.EventInfo;
-
 import org.bson.Document;
-import org.bson.types.ObjectId;
-
 import java.util.ArrayList;
-
 import io.realm.Realm;
-import io.realm.mongodb.App;
 import io.realm.mongodb.RealmResultTask;
 import io.realm.mongodb.User;
 import io.realm.mongodb.mongo.MongoClient;
@@ -38,12 +28,10 @@ import io.realm.mongodb.mongo.iterable.MongoCursor;
 public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder> {
 
     private ProgressDialog loadingBar;
-    private ArrayList<EventInfo> eventList;
-    private Context context;
+    private final ArrayList<EventInfo> eventList;
+    private final Context context;
     AppInfo appInfo;
     User user;
-    private MongoDatabase db;
-    private MongoClient client;
     private MongoCollection<Document> collection;
 
     public EventsAdapter(ArrayList<EventInfo> eventList, Context context) {
@@ -59,11 +47,17 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
         initializeDb();
 
-        return new EventsAdapter.ViewHolder(view);
+        return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+
+        if (getItemCount() == 0){
+            Toast.makeText(context, "No events found", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         holder.name.setText(eventList.get(position).getEventName());
         holder.sdate.setText(eventList.get(position).getStartDate());
         holder.edate.setText(eventList.get(position).getEndDate());
@@ -82,8 +76,6 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                     if (currentDoc.getString("eventId").equals(eventList.get(position).get_id())) {
                         holder.participantText.setText("Applied");
                         holder.participantText.setTextColor(Color.BLACK);
-                    } else {
-                        holder.participantText.setText("Apply");
                     }
                 }
             }
@@ -113,8 +105,8 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                             holder.participantText.setTextColor(Color.BLACK);
                             Toast.makeText(context, "Applied Successfully", Toast.LENGTH_SHORT).show();
                         }
+                        loadingBar.dismiss();
                     });
-                    loadingBar.dismiss();
                 }).setNegativeButton("No", (dialogInterface, i) -> {});
                 dialog.create(); dialog.show();
             } else {
@@ -128,7 +120,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         return eventList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView name, sdate, edate, fee, participantText, number;
         LinearLayout participant, l1, edit, l2, delete;
 
@@ -152,8 +144,8 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         Realm.init(context);
         appInfo = new AppInfo();
         user = appInfo.getApp().currentUser();
-        client = user.getMongoClient("mongodb-atlas");
-        db = client.getDatabase("Event");
+        MongoClient client = user.getMongoClient("mongodb-atlas");
+        MongoDatabase db = client.getDatabase("Event");
         collection = db.getCollection("Apply_User");
         loadingBar = new ProgressDialog(context);
     }

@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
@@ -19,6 +20,8 @@ import com.prankit.evenement.R;
 import com.prankit.evenement.Utils.AppInfo;
 
 import org.bson.Document;
+
+import java.util.concurrent.TimeoutException;
 
 import io.realm.Realm;
 import io.realm.mongodb.App;
@@ -42,10 +45,6 @@ public class SettingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
-        Toolbar toolbar = findViewById(R.id.settingToolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Setting");
-
         loadingBar = new ProgressDialog(this);
         Realm.init(this);
         appInfo = new AppInfo();
@@ -59,28 +58,50 @@ public class SettingActivity extends AppCompatActivity {
         inputName = findViewById(R.id.inputProfileName);
         inputNumber = findViewById(R.id.inputProfileNumber);
         inputEmail = findViewById(R.id.inputProfileEmail);
+        ImageView close = findViewById(R.id.closeSetting);
         Button addButton = findViewById(R.id.addProfileButton);
 
         addButton.setOnClickListener(view -> updateInfo());
+        close.setOnClickListener(view -> {
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+        });
     }
 
-    public  void  retrieveInfo(){
-        loadingBar.setTitle("Checking Profile");
-        loadingBar.setMessage("Please wait...");
-        loadingBar.setCanceledOnTouchOutside(true);
-        loadingBar.show();
-        Document findQuery = new Document("userId", user.getId());
-        collection.findOne(findQuery).getAsync((App.Result<Document> result) -> {
-            if (result.isSuccess() && !result.get().getString("name").equals("")){
-                updateName = result.get().getString("name");
-                updateEmail = result.get().getString("email");
-                updateNumber = result.get().getString("number");
-                inputName.setText(updateName);
-                inputEmail.setText(updateEmail);
-                inputNumber.setText(updateNumber);
-            }
-        });
-        loadingBar.dismiss();
+    public void retrieveInfo() {
+        try {
+            loadingBar.setTitle("Checking Profile");
+            loadingBar.setMessage("Please wait...");
+            loadingBar.setCanceledOnTouchOutside(true);
+            loadingBar.show();
+            Document findQuery = new Document("userId", user.getId());
+            collection.findOne(findQuery).getAsync((App.Result<Document> result) -> {
+                if (result.isSuccess() && !result.get().getString("name").equals("")) {
+                    updateName = result.get().getString("name");
+                    updateEmail = result.get().getString("email");
+                    updateNumber = result.get().getString("number");
+                    inputName.setText(updateName);
+                    inputEmail.setText(updateEmail);
+                    inputNumber.setText(updateNumber);
+                }
+                else {
+                    new AlertDialog.Builder(SettingActivity.this)
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .setTitle("Error in retrieving profile")
+                            .setMessage(result.getError().getErrorMessage())
+                            .setPositiveButton("Ok", null)
+                            .show();
+                }
+                loadingBar.dismiss();
+            });
+        } catch (Exception e) {
+            new AlertDialog.Builder(SettingActivity.this)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setTitle(e.toString())
+                    .setMessage(e.getMessage())
+                    .setPositiveButton("Ok", null)
+                    .show();
+        }
     }
 
     private void updateInfo() {
@@ -91,23 +112,23 @@ public class SettingActivity extends AppCompatActivity {
         Document findQuery = new Document().append("userId", user.getId());
         collection.updateOne(findQuery, new Document("userId", user.getId()).append("name", inputName.getText().toString())
                 .append("number", inputNumber.getText().toString())).getAsync(result -> {
-                    if (result.isSuccess()){
-                        long count = result.get().getModifiedCount();
-                        if (count == 1) {
-                            Toast.makeText(SettingActivity.this, "Update profile successfully", Toast.LENGTH_SHORT).show();
-                        }
-                    } else {
-                        new AlertDialog.Builder(SettingActivity.this)
-                                .setIcon(android.R.drawable.ic_dialog_alert)
-                                .setTitle("Error in updating profile")
-                                .setMessage(result.getError().getErrorMessage())
-                                .setPositiveButton("Ok", null)
-                                .show();
-                    }
-                });
-        loadingBar.dismiss();
-        startActivity(new Intent(SettingActivity.this, MainActivity.class));
-        finish();
+            if (result.isSuccess()) {
+                long count = result.get().getModifiedCount();
+                if (count == 1) {
+                    startActivity(new Intent(SettingActivity.this, MainActivity.class));
+                    finish();
+                    Toast.makeText(SettingActivity.this, "Update profile successfully", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                new AlertDialog.Builder(SettingActivity.this)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setTitle("Error in updating profile")
+                        .setMessage(result.getError().getErrorMessage())
+                        .setPositiveButton("Ok", null)
+                        .show();
+            }
+            loadingBar.dismiss();
+        });
     }
 
     @Override
@@ -127,7 +148,7 @@ public class SettingActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         super.onOptionsItemSelected(item);
-        if (item.getItemId() == R.id.closeOption){
+        if (item.getItemId() == R.id.closeOption) {
             finish();
         }
         return true;
