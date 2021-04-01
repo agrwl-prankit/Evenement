@@ -1,5 +1,6 @@
 package com.prankit.evenement.fragments;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -9,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.prankit.evenement.R;
 import com.prankit.evenement.Utils.AppInfo;
@@ -30,7 +33,6 @@ import io.realm.mongodb.mongo.iterable.MongoCursor;
 
 public class MyEventFragment extends Fragment {
 
-    private View view;
     AppInfo appInfo;
     private User user;
     private MongoCollection<Document> postCollection;
@@ -38,6 +40,8 @@ public class MyEventFragment extends Fragment {
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView.Adapter adapter;
     ArrayList<EventInfo> events = new ArrayList<>();
+    private ProgressDialog loadingBar;
+    private TextView text;
 
     public MyEventFragment() {
         // Required empty public constructor
@@ -47,9 +51,12 @@ public class MyEventFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_my_event, container, false);
+        View view = inflater.inflate(R.layout.fragment_my_event, container, false);
         initializeDb();
 
+        text = view.findViewById(R.id.noMyEvents);
+        text.setVisibility(View.GONE);
+        loadingBar = new ProgressDialog(getActivity());
         recyclerView = view.findViewById(R.id.myEventRecycleList);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
@@ -59,6 +66,10 @@ public class MyEventFragment extends Fragment {
     }
 
     public  void  retrieveInfo() {
+        loadingBar.setTitle("Collecting your events");
+        loadingBar.setMessage("Please wait...");
+        loadingBar.setCanceledOnTouchOutside(true);
+        loadingBar.show();
         events.clear();
         Document findQuery = new Document().append("userId", user.getId());
         RealmResultTask<MongoCursor<Document>> findTask = postCollection.find(findQuery).iterator();
@@ -85,6 +96,10 @@ public class MyEventFragment extends Fragment {
                         recyclerView.setLayoutManager(layoutManager);
                     }
                 }
+            }
+            loadingBar.dismiss();
+            if (events.size()==0){
+                text.setVisibility(View.VISIBLE);
             }
         });
     }

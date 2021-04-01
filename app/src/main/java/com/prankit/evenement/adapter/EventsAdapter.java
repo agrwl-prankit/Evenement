@@ -52,12 +52,6 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-
-        if (getItemCount() == 0){
-            Toast.makeText(context, "No events found", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
         holder.name.setText(eventList.get(position).getEventName());
         holder.sdate.setText(eventList.get(position).getStartDate());
         holder.edate.setText(eventList.get(position).getEndDate());

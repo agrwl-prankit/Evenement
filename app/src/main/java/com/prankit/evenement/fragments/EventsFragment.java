@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.prankit.evenement.adapter.EventsAdapter;
 import com.prankit.evenement.R;
@@ -42,6 +43,7 @@ public class EventsFragment extends Fragment {
     private RecyclerView.Adapter adapter;
     ArrayList<EventInfo> events = new ArrayList<>();
     private ProgressDialog loadingBar;
+    private TextView text;
 
     public EventsFragment() {
         // Required empty public constructor
@@ -54,6 +56,8 @@ public class EventsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_events, container, false);
         initializeDb();
 
+        text = view.findViewById(R.id.noMyEvents);
+        text.setVisibility(View.GONE);
         loadingBar = new ProgressDialog(getActivity());
         recyclerView = view.findViewById(R.id.eventRecycleList);
         recyclerView.setHasFixedSize(true);
@@ -96,6 +100,9 @@ public class EventsFragment extends Fragment {
                 }
             }
             loadingBar.dismiss();
+            if (events.size()==0){
+                text.setVisibility(View.VISIBLE);
+            }
         });
     }
 

@@ -64,6 +64,7 @@ public class MyEventAdapter extends RecyclerView.Adapter<MyEventAdapter.ViewHold
         holder.edate.setText(eventList.get(position).getEndDate());
         holder.fee.setText(eventList.get(position).getFee());
         holder.number.setText(eventList.get(position).getNumber());
+        holder.cName.setText(eventList.get(position).getCreaterName());
 
         holder.participant.setVisibility(View.VISIBLE);
         holder.l1.setVisibility(View.VISIBLE);
@@ -135,12 +136,13 @@ public class MyEventAdapter extends RecyclerView.Adapter<MyEventAdapter.ViewHold
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView name, sdate, edate, fee, participantText, number;
+        TextView name, sdate, edate, fee, participantText, number, cName;
         LinearLayout participant, l1, edit, l2, delete;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.eventName);
+            cName = itemView.findViewById(R.id.eventCreaterName);
             sdate = itemView.findViewById(R.id.eventSDate);
             edate = itemView.findViewById(R.id.eventEDate);
             fee = itemView.findViewById(R.id.eventfee);
