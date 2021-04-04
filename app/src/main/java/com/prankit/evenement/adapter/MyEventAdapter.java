@@ -29,10 +29,12 @@ import org.bson.types.ObjectId;
 import java.util.ArrayList;
 
 import io.realm.Realm;
+import io.realm.mongodb.RealmResultTask;
 import io.realm.mongodb.User;
 import io.realm.mongodb.mongo.MongoClient;
 import io.realm.mongodb.mongo.MongoCollection;
 import io.realm.mongodb.mongo.MongoDatabase;
+import io.realm.mongodb.mongo.iterable.MongoCursor;
 
 public class MyEventAdapter extends RecyclerView.Adapter<MyEventAdapter.ViewHolder> {
 
@@ -41,8 +43,6 @@ public class MyEventAdapter extends RecyclerView.Adapter<MyEventAdapter.ViewHold
     private Context context;
     AppInfo appInfo;
     User user;
-    private MongoDatabase db;
-    private MongoClient client;
     private MongoCollection<Document> postCollection, applyCollection;
 
     public MyEventAdapter(ArrayList<EventInfo> eventList, Context context) {
@@ -55,7 +55,7 @@ public class MyEventAdapter extends RecyclerView.Adapter<MyEventAdapter.ViewHold
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.show_event_view, parent, false);
         initializeDb();
-        return new MyEventAdapter.ViewHolder(view);
+        return new ViewHolder(view);
     }
 
     @Override
@@ -73,14 +73,11 @@ public class MyEventAdapter extends RecyclerView.Adapter<MyEventAdapter.ViewHold
         holder.l2.setVisibility(View.VISIBLE);
         holder.delete.setVisibility(View.VISIBLE);
 
-        holder.participant.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(context, ShowParticipantsActivity.class);
-                intent.putExtra("eventId", eventList.get(position).get_id());
-                intent.putExtra("eventName", eventList.get(position).getEventName());
-                context.startActivity(intent);
-            }
+        holder.participant.setOnClickListener(view -> {
+            Intent intent = new Intent(context, ShowParticipantsActivity.class);
+            intent.putExtra("eventId", eventList.get(position).get_id());
+            intent.putExtra("eventName", eventList.get(position).getEventName());
+            context.startActivity(intent);
         });
 
         holder.edit.setOnClickListener(view -> {
@@ -108,11 +105,12 @@ public class MyEventAdapter extends RecyclerView.Adapter<MyEventAdapter.ViewHold
                 loadingBar.setMessage("Please wait...");
                 loadingBar.setCanceledOnTouchOutside(true);
                 loadingBar.show();
+
                 Document postQuery = new Document("_id", new ObjectId(eventList.get(position).get_id()));
                 postCollection.deleteOne(postQuery).getAsync(result -> {
                     if (result.isSuccess()){
                         Document applyQuery = new Document("eventId", eventList.get(position).get_id());
-                        applyCollection.deleteOne(applyQuery).getAsync(result1 -> {
+                        applyCollection.deleteMany(applyQuery).getAsync(result1 -> {
                             if (result1.isSuccess()){
                                 context.startActivity(new Intent(context, MainActivity.class));
                                 Toast.makeText(context, "event deleted successfully", Toast.LENGTH_SHORT).show();
@@ -146,7 +144,7 @@ public class MyEventAdapter extends RecyclerView.Adapter<MyEventAdapter.ViewHold
         return eventList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView name, sdate, edate, fee, number, cName;
         LinearLayout participant, l1, edit, l2, delete;
 
@@ -170,8 +168,8 @@ public class MyEventAdapter extends RecyclerView.Adapter<MyEventAdapter.ViewHold
         Realm.init(context);
         appInfo = new AppInfo();
         user = appInfo.getApp().currentUser();
-        client = user.getMongoClient("mongodb-atlas");
-        db = client.getDatabase("Event");
+        MongoClient client = user.getMongoClient("mongodb-atlas");
+        MongoDatabase db = client.getDatabase("Event");
         applyCollection = db.getCollection("Apply_User");
         postCollection = db.getCollection("Post_Info");
         loadingBar = new ProgressDialog(context);
