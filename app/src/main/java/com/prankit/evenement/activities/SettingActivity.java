@@ -89,7 +89,10 @@ public class SettingActivity extends AppCompatActivity {
                             .setIcon(android.R.drawable.ic_dialog_alert)
                             .setTitle("Error in retrieving profile")
                             .setMessage(result.getError().getErrorMessage())
-                            .setPositiveButton("Ok", (dialogInterface, i) -> finish())
+                            .setPositiveButton("Ok", (dialogInterface, i) -> {
+                                startActivity(new Intent(this, MainActivity.class));
+                                finish();
+                            })
                             .show();
                 }
                 loadingBar.dismiss();
