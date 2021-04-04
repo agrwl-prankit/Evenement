@@ -2,17 +2,20 @@ package com.prankit.evenement.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
+
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.Toast;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.prankit.evenement.R;
 import com.prankit.evenement.TabAdapter;
 import com.prankit.evenement.Utils.AppInfo;
+
 import io.realm.Realm;
 import io.realm.mongodb.User;
 
@@ -31,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.addTab(tabLayout.newTab().setText("Events"));
         tabLayout.addTab(tabLayout.newTab().setText("My Events"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-        final TabAdapter adapter = new TabAdapter(this,getSupportFragmentManager(), tabLayout.getTabCount());
+        final TabAdapter adapter = new TabAdapter(this, getSupportFragmentManager(), tabLayout.getTabCount());
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -39,9 +42,11 @@ public class MainActivity extends AppCompatActivity {
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
             }
+
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
             }
+
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
             }
@@ -67,17 +72,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    void logout(){
+    void logout() {
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setTitle("Log Out");
         dialog.setMessage("Do you want to Log out?");
         dialog.setPositiveButton("Yes", (dialogInterface, d) -> {
+            ProgressDialog loadingBar = new ProgressDialog(this);
+            loadingBar.setMessage("Signing out..");
+            loadingBar.setCanceledOnTouchOutside(true);
+            loadingBar.show();
             user.logOutAsync(result -> {
-                ProgressDialog loadingBar = new ProgressDialog(this);
-                loadingBar.setMessage("Signing out..");
-                loadingBar.setCanceledOnTouchOutside(true);
-                loadingBar.show();
-                if(result.isSuccess()){
+                if (result.isSuccess()) {
                     startActivity(new Intent(MainActivity.this, LoginActivity.class));
                     finish();
                     Toast.makeText(this, "Sign out successfully", Toast.LENGTH_SHORT).show();
@@ -92,8 +97,7 @@ public class MainActivity extends AppCompatActivity {
                 loadingBar.dismiss();
             });
         })
-                .setNegativeButton("No", (dialogInterface, d) -> {
-                });
+                .setNegativeButton("No", (dialogInterface, d) -> { });
         dialog.create();
         dialog.show();
     }
