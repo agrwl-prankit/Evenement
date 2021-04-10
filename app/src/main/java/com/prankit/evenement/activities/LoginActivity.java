@@ -41,7 +41,9 @@ public class LoginActivity extends AppCompatActivity {
         TextView signUp = findViewById(R.id.signUpButton);
         TextView forgetPassword = findViewById(R.id.forgetPassword);
 
-        //forgetPassword.setOnClickListener(view -> {});
+        forgetPassword.setOnClickListener(view -> {
+            startActivity(new Intent(this, ResetPasswordActivity.class));
+        });
         signUp.setOnClickListener(view -> startActivity(new Intent(this, SignUpActivity.class)));
         loginButton.setOnClickListener(view -> login(email.getText().toString(), password.getText().toString()));
     }
