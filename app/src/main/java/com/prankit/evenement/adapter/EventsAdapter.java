@@ -86,6 +86,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                     loadingBar.setCanceledOnTouchOutside(true);
                     loadingBar.show();
                     collection.insertOne(new Document("appliedUserId", user.getId())
+                            .append("createrId", eventList.get(position).getUserId())
                             .append("eventId", eventList.get(position).get_id())).getAsync(result -> {
                         if (!result.isSuccess()) {
                             new AlertDialog.Builder(context)

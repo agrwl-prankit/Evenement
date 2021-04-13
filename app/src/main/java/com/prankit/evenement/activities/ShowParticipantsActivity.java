@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -31,7 +32,6 @@ import io.realm.mongodb.mongo.iterable.MongoCursor;
 public class ShowParticipantsActivity extends AppCompatActivity {
 
     private String eventId;
-    AppInfo appInfo;
     private User user;
     private MongoCollection<Document> userCollection, applyCollection;
     private RecyclerView recyclerView;
@@ -69,6 +69,7 @@ public class ShowParticipantsActivity extends AppCompatActivity {
     }
 
     private void retrieveInfo() {
+        Log.i("eid1", eventId);
         loadingBar.setTitle("Collecting Participants");
         loadingBar.setMessage("Please wait...");
         loadingBar.setCanceledOnTouchOutside(true);
@@ -80,23 +81,23 @@ public class ShowParticipantsActivity extends AppCompatActivity {
             MongoCursor<Document> result = task.get();
             while (result.hasNext()) {
                 Document currentDoc = result.next();
-                if (!currentDoc.getString("appliedUserId").equals("")) {
-                    String userId = currentDoc.getString("appliedUserId");
-                    Document userQuery = new Document("userId", userId);
-                    userCollection.findOne(userQuery).getAsync(result1 -> {
-                        String name = result1.get().getString("name");
-                        String number = result1.get().getString("number");
-                        String email = result1.get().getString("email");
-                        ParticipantInfo participantInfo = new ParticipantInfo(name, number, email);
-                        participants.add(participantInfo);
-                        adapter = new ShowParticipantAdapter(participants, ShowParticipantsActivity.this);
-                        recyclerView.setAdapter(adapter);
-                        recyclerView.setLayoutManager(layoutManager);
-                    });
-                }
+                Log.i("eiddoc", currentDoc.toJson());
+                String userId = currentDoc.getString("appliedUserId");
+                Log.i("eiduser", userId);
+                Document userQuery = new Document("userId", userId);
+                userCollection.findOne(userQuery).getAsync(result1 -> {
+                    String name = result1.get().getString("name");
+                    String number = result1.get().getString("number");
+                    String email = result1.get().getString("email");
+                    ParticipantInfo participantInfo = new ParticipantInfo(name, number, email);
+                    participants.add(participantInfo);
+                    adapter = new ShowParticipantAdapter(participants, ShowParticipantsActivity.this);
+                    recyclerView.setAdapter(adapter);
+                    recyclerView.setLayoutManager(layoutManager);
+                });
             }
             loadingBar.dismiss();
-            if (participants.size()==0){
+            if (participants.size() == 0) {
                 text.setVisibility(View.VISIBLE);
             }
         });
@@ -104,7 +105,7 @@ public class ShowParticipantsActivity extends AppCompatActivity {
 
     private void initializeDb() {
         Realm.init(this);
-        appInfo = new AppInfo();
+        AppInfo appInfo = new AppInfo();
         user = appInfo.getApp().currentUser();
         MongoClient client = user.getMongoClient("mongodb-atlas");
         MongoDatabase db = client.getDatabase("Event");
