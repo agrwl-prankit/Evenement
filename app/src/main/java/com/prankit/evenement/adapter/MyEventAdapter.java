@@ -67,12 +67,6 @@ public class MyEventAdapter extends RecyclerView.Adapter<MyEventAdapter.ViewHold
         holder.number.setText(eventList.get(position).getNumber());
         holder.cName.setText(eventList.get(position).getCreaterName());
 
-        holder.participant.setVisibility(View.VISIBLE);
-        holder.l1.setVisibility(View.VISIBLE);
-        holder.edit.setVisibility(View.VISIBLE);
-        holder.l2.setVisibility(View.VISIBLE);
-        holder.delete.setVisibility(View.VISIBLE);
-
         holder.participant.setOnClickListener(view -> {
             Intent intent = new Intent(context, ShowParticipantsActivity.class);
             intent.putExtra("eventId", eventList.get(position).get_id());
