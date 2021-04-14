@@ -5,58 +5,48 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.ResetPasswordActivity">
+    tools:context=".activities.SendResetLinkActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Login Help"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:layout_margin="10dp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Evenement"
-        android:layout_centerHorizontal="true"
-        android:layout_above="@id/ll"
+        android:layout_above="@id/rl"
         android:textSize="55sp"
+        android:layout_centerHorizontal="true"
         android:layout_marginBottom="30dp"/>
 
     <LinearLayout
-        android:id="@+id/ll"
+        android:id="@+id/rl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="15dp"
         android:layout_centerInParent="true"
-        android:gravity="center"
+        android:layout_margin="15dp"
         android:orientation="vertical">
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:passwordToggleEnabled="true">
+            android:layout_height="wrap_content">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/inputResetPassword"
+                android:id="@+id/inputResetEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:cursorVisible="true"
-                android:hint="New Password" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            app:passwordToggleEnabled="true">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/inputConfirmPassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:cursorVisible="true"
-                android:hint="Confirm Password"
-                android:inputType="textPassword" />
+                android:hint="Email..." />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
-            android:id="@+id/resetButton"
+            android:id="@+id/sendLinkButton"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"

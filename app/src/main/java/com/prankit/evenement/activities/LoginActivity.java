@@ -6,8 +6,6 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,8 +15,6 @@ import com.prankit.evenement.R;
 import com.prankit.evenement.Utils.AppInfo;
 
 import io.realm.Realm;
-import io.realm.mongodb.App;
-import io.realm.mongodb.AppConfiguration;
 import io.realm.mongodb.Credentials;
 
 public class LoginActivity extends AppCompatActivity {
@@ -42,7 +38,7 @@ public class LoginActivity extends AppCompatActivity {
         TextView forgetPassword = findViewById(R.id.forgetPassword);
 
         forgetPassword.setOnClickListener(view -> {
-            startActivity(new Intent(this, ResetPasswordActivity.class));
+            startActivity(new Intent(this, SendResetLinkActivity.class));
         });
         signUp.setOnClickListener(view -> startActivity(new Intent(this, SignUpActivity.class)));
         loginButton.setOnClickListener(view -> login(email.getText().toString(), password.getText().toString()));

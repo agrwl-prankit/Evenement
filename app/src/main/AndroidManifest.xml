@@ -3,6 +3,9 @@
     package="com.prankit.evenement">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -11,8 +14,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Design.Light.NoActionBar">
+        <activity android:name=".activities.ResetPasswordActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https"
+                    android:host="www.evenement.com"
+                    android:pathPrefix="/resetPassword" />
+            </intent-filter>
+        </activity>
         <activity android:name=".activities.PaymentActivity" />
-        <activity android:name=".activities.ResetPasswordActivity" />
+        <activity android:name=".activities.SendResetLinkActivity">
+        </activity>
         <activity android:name=".activities.ShowParticipantsActivity" />
         <activity android:name=".activities.AddEventActivity" />
         <activity android:name=".activities.SettingActivity" />
