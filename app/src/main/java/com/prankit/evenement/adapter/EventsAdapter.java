@@ -1,16 +1,20 @@
 package com.prankit.evenement.adapter;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 import com.prankit.evenement.R;
 import com.prankit.evenement.Utils.AppInfo;
@@ -57,8 +61,9 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         holder.edate.setText(eventList.get(position).getEndDate());
         holder.fee.setText(eventList.get(position).getFee());
         holder.number.setText(eventList.get(position).getNumber());
-        holder.participant.setVisibility(View.VISIBLE);
-        holder.participantText.setText("Apply");
+        holder.applyText.setText("Apply");
+        holder.callText.setText("Call");
+        holder.emailText.setText("Email");
 
         Document findQuery = new Document("appliedUserId", user.getId());
         RealmResultTask<MongoCursor<Document>> findTask = collection.find(findQuery).iterator();
@@ -68,15 +73,30 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                 while (result.hasNext()) {
                     Document currentDoc = result.next();
                     if (currentDoc.getString("eventId").equals(eventList.get(position).get_id())) {
-                        holder.participantText.setText("Applied");
-                        holder.participantText.setTextColor(Color.BLACK);
+                        holder.applyText.setText("Applied");
+                        holder.applyText.setTextColor(Color.BLACK);
                     }
                 }
             }
         });
 
-        holder.participant.setOnClickListener(view -> {
-            if (holder.participantText.getText().equals("Apply")) {
+        holder.call.setOnClickListener(v -> {
+            Intent callIntent = new Intent(Intent.ACTION_DIAL);
+            callIntent.setData(Uri.parse("tel:" + eventList.get(position).getNumber()));
+            context.startActivity(callIntent);
+        });
+
+        holder.email.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("message/rfc822");
+            intent.putExtra(Intent.EXTRA_EMAIL, new String[] {eventList.get(position).getEmail()});
+            intent.putExtra(Intent.EXTRA_SUBJECT, "Apply in " + eventList.get(position).getEventName());
+            Intent mailer = Intent.createChooser(intent, null);
+            context.startActivity(mailer);
+        });
+
+        holder.apply.setOnClickListener(view -> {
+            if (holder.applyText.getText().equals("Apply")) {
                 AlertDialog.Builder dialog = new AlertDialog.Builder(context);
                 dialog.setTitle("Apply in event");
                 dialog.setMessage("Do you want to apply in this event?");
@@ -96,8 +116,8 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                                     .setPositiveButton("Ok", null)
                                     .show();
                         } else {
-                            holder.participantText.setText("Applied");
-                            holder.participantText.setTextColor(Color.BLACK);
+                            holder.applyText.setText("Applied");
+                            holder.applyText.setTextColor(Color.BLACK);
                             Toast.makeText(context, "Applied Successfully", Toast.LENGTH_SHORT).show();
                         }
                         loadingBar.dismiss();
@@ -108,6 +128,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                 Toast.makeText(context, "You have already applied in this event", Toast.LENGTH_SHORT).show();
             }
         });
+
     }
 
     @Override
@@ -116,8 +137,8 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView name, sdate, edate, fee, participantText, number;
-        LinearLayout participant, l1, edit, l2, delete;
+        TextView name, sdate, edate, fee, applyText, number, callText, emailText;
+        LinearLayout apply, l1, call, l2, email;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -125,12 +146,14 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             sdate = itemView.findViewById(R.id.eventSDate);
             edate = itemView.findViewById(R.id.eventEDate);
             fee = itemView.findViewById(R.id.eventfee);
-            participantText = itemView.findViewById(R.id.eventParticipantText);
-            participant = itemView.findViewById(R.id.eventParticipant);
+            applyText = itemView.findViewById(R.id.eventParticipantText);
+            apply = itemView.findViewById(R.id.eventParticipant);
             l1 = itemView.findViewById(R.id.eventL1);
-            edit = itemView.findViewById(R.id.eventEdit);
+            call = itemView.findViewById(R.id.eventEdit);
+            callText = itemView.findViewById(R.id.eventEditText);
             l2 = itemView.findViewById(R.id.eventL2);
-            delete = itemView.findViewById(R.id.eventDelete);
+            email = itemView.findViewById(R.id.eventDelete);
+            emailText = itemView.findViewById(R.id.eventDeleteText);
             number = itemView.findViewById(R.id.eventCreaterNumber);
         }
     }
