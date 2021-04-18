@@ -1,11 +1,18 @@
 package com.prankit.evenement.activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,11 +28,14 @@ public class LoginActivity extends AppCompatActivity {
 
     AppInfo appInfo;
     private ProgressDialog loadingBar;
+    private static final int INTERNET_PERMISSION_CODE = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        internetPermission();
 
         Realm.init(this);
         appInfo = new AppInfo();
@@ -69,5 +79,32 @@ public class LoginActivity extends AppCompatActivity {
             }
             loadingBar.dismiss();
         });
+    }
+
+    public void internetPermission(){
+        checkPermission(Manifest.permission.INTERNET, INTERNET_PERMISSION_CODE);
+    }
+
+    public void checkPermission(String permission, int requestCode)
+    {
+        if (ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_DENIED) {
+            // Requesting the permission
+            ActivityCompat.requestPermissions(this, new String[] { permission }, requestCode);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == INTERNET_PERMISSION_CODE){
+            if (grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_DENIED){
+                Toast.makeText(this, "Allow the internet permission from setting", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent();
+                intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                Uri uri = Uri.fromParts("package", this.getPackageName(), null);
+                intent.setData(uri);
+                startActivity(intent);
+            }
+        }
     }
 }
