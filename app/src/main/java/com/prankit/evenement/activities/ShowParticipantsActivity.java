@@ -39,7 +39,6 @@ public class ShowParticipantsActivity extends AppCompatActivity {
     private RecyclerView.Adapter adapter;
     ArrayList<ParticipantInfo> participants = new ArrayList<>();
     private ProgressDialog loadingBar;
-    private TextView text;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,10 +48,8 @@ public class ShowParticipantsActivity extends AppCompatActivity {
         eventId = getIntent().getStringExtra("eventId");
         String eventName = getIntent().getStringExtra("eventName");
 
-        text = findViewById(R.id.noParticipants);
-        text.setVisibility(View.GONE);
         TextView toolBar = findViewById(R.id.showParticipantToolBar);
-        toolBar.setText(" " + eventName);
+        toolBar.setText(" Event name : " + eventName);
 
         ImageView closeActivity = findViewById(R.id.closeParticipantActivity);
         closeActivity.setOnClickListener(view -> {
@@ -97,9 +94,7 @@ public class ShowParticipantsActivity extends AppCompatActivity {
                 });
             }
             loadingBar.dismiss();
-            if (participants.size() == 0) {
-                text.setVisibility(View.VISIBLE);
-            }
+            Log.i("partList", "" + participants.size());
         });
     }
 

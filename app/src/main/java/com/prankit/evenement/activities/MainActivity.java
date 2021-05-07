@@ -38,9 +38,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        internetPermission();
-        callPermission();
-
         TabLayout tabLayout = findViewById(R.id.TabLayout);
         ViewPager viewPager = findViewById(R.id.ViewPager);
         tabLayout.addTab(tabLayout.newTab().setText("Events"));
@@ -81,6 +78,13 @@ public class MainActivity extends AppCompatActivity {
             finish();
         });
         logOut.setOnClickListener(view -> logout());
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        internetPermission();
+        callPermission();
     }
 
     void logout() {

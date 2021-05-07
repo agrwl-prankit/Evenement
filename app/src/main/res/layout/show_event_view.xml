@@ -9,7 +9,7 @@
     app:cardElevation="5dp">
 
     <RelativeLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
         <LinearLayout
@@ -165,7 +165,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="@android:color/darker_gray"/>
+                        android:background="@android:color/darker_gray" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -195,8 +195,8 @@
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="0.03"
-                            android:orientation="vertical"
-                            android:background="@android:color/darker_gray"/>
+                            android:background="@android:color/darker_gray"
+                            android:orientation="vertical" />
 
                         <LinearLayout
                             android:id="@+id/eventEdit"
@@ -218,9 +218,9 @@
                             android:id="@+id/eventL2"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:background="@android:color/darker_gray"
                             android:layout_weight="0.03"
-                            android:orientation="vertical"/>
+                            android:background="@android:color/darker_gray"
+                            android:orientation="vertical" />
 
                         <LinearLayout
                             android:id="@+id/eventDelete"

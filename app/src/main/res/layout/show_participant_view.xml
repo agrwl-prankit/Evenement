@@ -13,6 +13,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:padding="5dp"
         android:orientation="vertical">
 
         <TextView
@@ -22,6 +23,7 @@
             android:text="Name"
             android:textSize="20sp"
             android:textStyle="bold"
+            android:padding="5dp"
             android:gravity="center_horizontal"/>
 
         <TextView
@@ -31,6 +33,7 @@
             android:text="Number"
             android:textSize="20sp"
             android:textStyle="bold"
+            android:padding="5dp"
             android:gravity="center_horizontal" />
 
         <TextView
@@ -40,6 +43,7 @@
             android:text="Email"
             android:textSize="20sp"
             android:textStyle="bold"
+            android:padding="5dp"
             android:gravity="center_horizontal" />
 
     </LinearLayout>
